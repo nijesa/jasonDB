@@ -1,0 +1,34 @@
+{
+  "users":[
+           {
+             "id":1,
+             "username":"Rojo",
+             "state":true,
+               "deck":[25,131,147,3,6,9]
+           },
+          {
+             "id":2,
+             "username":"Maximo",
+             "state":true,
+               "deck":[227,344,306,346,348,376]
+           },
+    {
+             "id":3,
+             "username":"Cynthia",
+             "state":true,
+               "deck":[445,423,407,350,442,468]
+           },
+    {
+             "id":4,
+             "username":"Iris",
+             "state":true,
+               "deck":[635,621,306,567,131,612]
+           },
+    {
+             "id":5,
+             "username":"Leonel",
+             "state":true,
+               "deck":[6,887,866,818,815,812]
+           },
+  ]
+}
