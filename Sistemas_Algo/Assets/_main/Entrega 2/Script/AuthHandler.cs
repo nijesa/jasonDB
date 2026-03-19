@@ -294,11 +294,22 @@ public class AuthHandler : MonoBehaviour
     // También un handler para UI si quieres pasar un campo de texto
     public void UpdateScoreButtonHandler(TMP_InputField scoreInputField)
     {
-        if (int.TryParse(scoreInputField.text, out int parsed))
-            StartCoroutine(UpdateScoreCoroutine(parsed));
-        else
-            Debug.LogWarning("Score no válido");
+        if (scoreInputField == null)
+        {
+            Debug.LogWarning("InputField de score no asignado.");
+            return;
+        }
+
+        if (!int.TryParse(scoreInputField.text, out int parsed))
+        {
+            Debug.LogWarning("Score no válido.");
+            if (leaderboardStatusText != null) leaderboardStatusText.text = "Score no válido.";
+            return;
+        }
+
+        StartCoroutine(UpdateScoreCoroutine(parsed));
     }
+
 
     private IEnumerator UpdateScoreCoroutine(int score)
     {
@@ -308,11 +319,14 @@ public class AuthHandler : MonoBehaviour
             yield break;
         }
 
-        ScoreData sd = new ScoreData { username = username, score = score };
-        string json = JsonUtility.ToJson(sd);
+        UpdateUserData data = new UpdateUserData();
+        data.username = username;
+        data.data = new ScoreData { score = score };
 
-        string url = apiUrl.TrimEnd('/') + scoresEndpoint;
-        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        string json = JsonUtility.ToJson(data);
+
+        string url = apiUrl.TrimEnd('/') + "/api/usuarios";
+        using (UnityWebRequest www = new UnityWebRequest(url, "PATCH"))
         {
             byte[] body = Encoding.UTF8.GetBytes(json);
             www.uploadHandler = new UploadHandlerRaw(body);
@@ -455,8 +469,14 @@ public class AuthResponse
 [Serializable]
 public class ScoreData
 {
-    public string username;
     public int score;
+}
+
+[Serializable]
+public class UpdateUserData
+{
+    public string username;
+    public ScoreData data;
 }
 
 [Serializable]
